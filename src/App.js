@@ -1,96 +1,82 @@
 import React, { useState } from 'react';
 import './App.css';
+import dollar from './icon-dollar.svg';
+import Person from './icon-person.svg'
 
-const App = () => {
+const TipCalculator = () => {
   const [bill, setBill] = useState('');
-  const [tipPercentage, setTipPercentage] = useState(null);
-  const [customTip, setCustomTip] = useState('');
+  const [tipPercentage, setTipPercentage] = useState(0);
   const [people, setPeople] = useState('');
-  const [totalTip, setTotalTip] = useState(0);
-  const [totalPerPerson, setTotalPerPerson] = useState(0);
+  const [customTip, setCustomTip] = useState('');
 
-  const calculateTip = (percentage) => {
+  const handleBillChange = (e) => setBill(e.target.value);
+  const handleTipPercentageChange = (percentage) => setTipPercentage(percentage);
+  const handlePeopleChange = (e) => setPeople(e.target.value);
+  const handleCustomTipChange = (e) => setCustomTip(e.target.value);
+
+  const calculateTip = () => {
     const billAmount = parseFloat(bill);
-    const numPeople = parseInt(people, 10);
-    const tip = (billAmount * percentage) / 100;
-    const total = billAmount + tip;
-    const perPerson = numPeople ? total / numPeople : total;
-    setTotalTip(tip);
-    setTotalPerPerson(perPerson);
+    const peopleCount = parseInt(people, 10);
+    const tipAmount = (billAmount * (tipPercentage / 100)) / peopleCount;
+    return isNaN(tipAmount) ? 0 : tipAmount.toFixed(2);
   };
 
-  const handleCustomTip = () => {
-    const customPercentage = parseFloat(customTip);
-    calculateTip(customPercentage);
-  };
-
-  const handleReset = () => {
-    setBill('');
-    setTipPercentage(null);
-    setCustomTip('');
-    setPeople('');
-    setTotalTip(0);
-    setTotalPerPerson(0);
+  const calculateTotal = () => {
+    const billAmount = parseFloat(bill);
+    const peopleCount = parseInt(people, 10);
+    const totalAmount = (billAmount * (1 + tipPercentage / 100)) / peopleCount;
+    return isNaN(totalAmount) ? 0 : totalAmount.toFixed(2);
   };
 
   return (
     <div className="container">
-    
-      <div className="input-group">
-        <label htmlFor="bill">Bill Amount:</label>
-        <input
-          type="number"
-          id="bill"
-          value={bill}
-          onChange={(e) => setBill(e.target.value)}
-        />
-
-
-      </div>
-      <div className="button-group">
-        {[5, 10, 15, 25, 50 , <label> <input
-          type="number"
-          id="customTip"
-          placeholder='custom'
-          value={customTip}
-          onChange={(e) => setCustomTip(e.target.value)}
-        />  </label> ].map((percentage) => (
-          <button key={percentage} onClick={() => calculateTip(percentage)}>
-            {percentage}%
-          </button>
-          
-         
-          
-        ))}
-      </div>
-      <div className="input-groups">
-        <label htmlFor="customTip">
-        </label>
+      <div className="input-container">
+        <label  className='nametag' >Bill</label>
+        <img src={dollar} alt='dollar' className='dollar'></img>
+        <input type="number" value={bill} onChange={handleBillChange} placeholder="0" />
         
+        <label className='nametag' >Select Tip %</label>
+        <div className="tip-buttons">
+          {[5, 10, 15, 25, 50].map((percentage) => (
+            <button key={percentage} onClick={() => handleTipPercentageChange(percentage)}>
+              {percentage}%
+            </button>
+          ))}
           
-        
-      </div>
-      <div className="input-group">
-        <label htmlFor="people">Number of People:</label>
-        <input
-          type="number"
-          id="people"
-          value={people}
-          onChange={(e) => setPeople(e.target.value)}
-        />
-        <div>
-         <button onClick={handleCustomTip}>Apply</button> 
+          <input
+            type="number"
+            value={customTip}
+            onChange={handleCustomTipChange}
+            placeholder="Custom"
+          />
         </div>
+        <br></br>
+        <br></br>
+        <br></br>
+
+        <label className='nametag'>Number of People</label>
+        <img src={Person} alt='person' className='person'></img>
+        <input type="number" value={people} onChange={handlePeopleChange} placeholder="0" />
       </div>
-      <div className="result-group">
-        <p>Total Tip: ${totalTip.toFixed(2)}</p>
-        <p>Total Per Person: ${totalPerPerson.toFixed(2)}</p>
+
+      <div className="output-container">
+        <div>
+          <span className='tips'>Tip Amount/person: </span>
+          <span className='resultsm'> ${calculateTip()}</span>
+        </div>
+        <div>
+          <p>Total/person: <span className='resultsms'>${calculateTotal()} </span> </p>
+          
+        </div>
+        <div className='Resetbtn'>
+        <button className='btn' onClick={() => {setBill(''); setTipPercentage(0); setPeople(''); setCustomTip('')}}>
+          RESET
+        </button>
+        </div>
       
-      <button onClick={handleReset} className="reset-button">Reset</button>
       </div>
     </div>
- 
   );
 };
 
-export default App;
+export default TipCalculator;
