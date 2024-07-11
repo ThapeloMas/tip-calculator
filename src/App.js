@@ -33,7 +33,7 @@ const TipCalculator = () => {
       <div className="input-container">
         <label  className='nametag' >Bill</label>
         <img src={dollar} alt='dollar' className='dollar'></img>
-        <input type="number" value={bill} onChange={handleBillChange} placeholder="0" />
+        <input className='inputb' type="number" value={bill} onChange={handleBillChange} placeholder="0" />
         
         <label className='nametag' >Select Tip %</label>
         <div className="tip-buttons">
@@ -56,13 +56,14 @@ const TipCalculator = () => {
 
         <label className='nametag'>Number of People</label>
         <img src={Person} alt='person' className='person'></img>
-        <input type="number" value={people} onChange={handlePeopleChange} placeholder="0" />
+        <input className='inputb' type="number" value={people} onChange={handlePeopleChange} placeholder="0" />
       </div>
 
       <div className="output-container">
         <div>
-          <span className='tips'>Tip Amount/person: </span>
-          <span className='resultsm'> ${calculateTip()}</span>
+          <p>TipAmount/person: <span className='resultsm'> ${calculateTip()}</span>  </p>
+         
+          
         </div>
         <div>
           <p>Total/person: <span className='resultsms'>${calculateTotal()} </span> </p>
